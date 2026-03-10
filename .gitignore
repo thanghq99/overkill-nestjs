@@ -1,48 +1,52 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
+# Environment
+.env
+.env.local
+.env.*.local
+.env.production
+.env.staging
 
-# compiled output
+# Compiled output
 /dist
+/build
 /tmp
 /out-tsc
 
-# dependencies
+# Dependencies
 /node_modules
 
-# IDEs and editors
+# NestJS specific
+/generated
+*.js.map
+
+# Testing & coverage
+/coverage
+/test-results
+
+# IDEs
 /.idea
-.project
-.classpath
-.c9/
-.vscode
-*.launch
-.settings/
 *.sublime-workspace
 
-# IDE - VSCode
-/.vscode
+# VSCode — commit project settings, ignore personal ones
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
 
-# misc
-/.sass-cache
-/connect.lock
-/coverage
-/libpeerconnection.log
-npm-debug.log
-testem.log
-/typings
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
 
-# e2e
-/e2e/*.js
-/e2e/*.map
+# Cache
+/.cache
+.parcel-cache
+.npm
 
-# System Files
+# System
 .DS_Store
 Thumbs.db
 
-# Build
-/.cache
-.parcel-cache
+# Misc
+/connect.lock
