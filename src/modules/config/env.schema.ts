@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ENVIRONMENT } from 'src/utils/constants';
+import { ENVIRONMENT } from '../../common/constants';
 
 const envSchema = z.object({
   NODE_ENV: z.enum(Object.values(ENVIRONMENT) as [string, ...string[]]),
