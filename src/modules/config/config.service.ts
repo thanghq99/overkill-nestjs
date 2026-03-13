@@ -1,24 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ENVIRONMENT } from 'src/utils/constants';
+import { Environment, ENVIRONMENT } from 'src/utils/constants';
+import { AppConfig, DbConfig } from './env.config';
 
 @Injectable()
 export class AppConfigService {
   constructor(private config: ConfigService) {}
 
-  get port(): number {
-    return this.config.get<number>('app.port') || 3000;
+  get port(): AppConfig['port'] {
+    return this.config.getOrThrow<number>('app.port');
   }
 
-  get nodeEnv(): string {
-    return this.config.get<string>('app.nodeEnv') || ENVIRONMENT.Development;
+  get nodeEnv(): AppConfig['nodeEnv'] {
+    return this.config.getOrThrow<Environment>('app.nodeEnv');
   }
 
-  get databaseUrl(): string {
-    return (
-      this.config.get<string>('db.databaseUrl') ||
-      'postgresql://postgres:postgres@localhost:5432/postgres'
-    );
+  get databaseUrl(): DbConfig['databaseUrl'] {
+    return this.config.getOrThrow<string>('db.databaseUrl');
   }
 
   get isProduction(): boolean {

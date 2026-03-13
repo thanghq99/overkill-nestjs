@@ -1,10 +1,9 @@
 import { z } from 'zod';
+import { ENVIRONMENT } from 'src/utils/constants';
 
 const envSchema = z.object({
-  NODE_ENV: z
-    .enum(['development', 'staging', 'production'])
-    .default('development'),
-  PORT: z.string().default('3000'),
+  NODE_ENV: z.enum(Object.values(ENVIRONMENT) as [string, ...string[]]),
+  PORT: z.coerce.number(),
   DATABASE_URL: z.url(),
 });
 

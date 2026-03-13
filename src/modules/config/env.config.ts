@@ -1,10 +1,14 @@
 import { registerAs } from '@nestjs/config';
+import { Environment } from 'src/utils/constants';
 
 export const appConfig = registerAs('app', () => ({
-  port: parseInt(process.env.PORT || '3000', 10),
-  nodeEnv: process.env.NODE_ENV,
+  port: Number(process.env.PORT),
+  nodeEnv: process.env.NODE_ENV as Environment,
 }));
 
 export const dbConfig = registerAs('db', () => ({
-  databaseUrl: process.env.DATABASE_URL,
+  databaseUrl: process.env.DATABASE_URL!,
 }));
+
+export type AppConfig = ReturnType<typeof appConfig>;
+export type DbConfig = ReturnType<typeof dbConfig>;
