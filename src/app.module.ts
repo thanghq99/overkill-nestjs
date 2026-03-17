@@ -1,21 +1,37 @@
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { AuthModule } from './modules/auth/auth.module';
 import { CustomConfigModule } from './modules/config/config.module';
 import { UsersModule } from './modules/users/users.module';
-import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
     CustomConfigModule,
-    MikroOrmModule.forRoot({
-      autoLoadEntities: true,
+    MikroOrmModule.forRoot(),
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          ttl: 60000,
+          limit: 10,
+        },
+      ],
     }),
     UsersModule,
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}
