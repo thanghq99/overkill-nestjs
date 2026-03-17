@@ -1,8 +1,9 @@
 import { Global, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { envSchema } from './env.schema';
-import { appConfig, dbConfig } from './env.config';
+
 import { AppConfigService } from './config.service';
+import { appConfig, dbConfig } from './env.config';
+import { envSchema } from './env.schema';
 
 @Global()
 @Module({

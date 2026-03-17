@@ -1,10 +1,11 @@
 import {
   Entity,
+  ManyToOne,
   PrimaryKey,
   Property,
-  ManyToOne,
   Unique,
 } from '@mikro-orm/core';
+
 import { User } from '../../users/entities/user.entity';
 
 @Entity({ tableName: 'accounts' })

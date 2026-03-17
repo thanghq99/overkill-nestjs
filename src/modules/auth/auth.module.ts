@@ -1,11 +1,13 @@
-import { Module } from '@nestjs/common';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { Session } from './entities/session.entity';
-import { Account } from './entities/account.entity';
-import { Verification } from './entities/verification.entity';
+
+import { Module } from '@nestjs/common';
+
+import { UsersModule } from '../users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { UsersModule } from '../users/users.module';
+import { Account } from './entities/account.entity';
+import { Session } from './entities/session.entity';
+import { Verification } from './entities/verification.entity';
 
 @Module({
   imports: [

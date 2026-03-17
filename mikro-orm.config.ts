@@ -1,6 +1,7 @@
-import { defineConfig, PostgreSqlDriver } from '@mikro-orm/postgresql';
-import { envSchema } from './src/modules/config/env.schema';
+import { PostgreSqlDriver, defineConfig } from '@mikro-orm/postgresql';
 import dotenv from 'dotenv';
+
+import { envSchema } from './src/modules/config/env.schema';
 
 dotenv.config();
 
