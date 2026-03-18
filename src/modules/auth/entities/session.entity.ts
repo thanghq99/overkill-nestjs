@@ -1,18 +1,10 @@
-import {
-  Entity,
-  ManyToOne,
-  PrimaryKey,
-  Property,
-  Unique,
-} from '@mikro-orm/core';
+import { Entity, ManyToOne, Property, Unique } from '@mikro-orm/core';
 
+import { CustomBaseEntity } from '../../../common/entities/CustomBaseEntity';
 import { User } from '../../users/entities/user.entity';
 
 @Entity({ tableName: 'sessions' })
-export class Session {
-  @PrimaryKey()
-  id: string;
-
+export class Session extends CustomBaseEntity {
   @ManyToOne(() => User, { deleteRule: 'cascade' })
   userId: string;
 
@@ -28,10 +20,4 @@ export class Session {
 
   @Property({ nullable: true })
   userAgent?: string;
-
-  @Property()
-  createdAt: Date = new Date();
-
-  @Property({ onUpdate: () => new Date() })
-  updatedAt: Date = new Date();
 }

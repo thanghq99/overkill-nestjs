@@ -1,10 +1,11 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, Index, Property } from '@mikro-orm/core';
+
+import { CustomBaseEntity } from '../../../common/entities/CustomBaseEntity';
+import { SoftDelete } from '../../../common/entities/SoftDelete.filter';
 
 @Entity({ tableName: 'users' })
-export class User {
-  @PrimaryKey()
-  id: string;
-
+@SoftDelete()
+export class User extends CustomBaseEntity {
   @Property()
   name: string;
 
@@ -12,14 +13,12 @@ export class User {
   email: string;
 
   @Property({ default: false })
-  emailVerified: boolean;
+  emailVerified?: boolean = false;
 
   @Property({ nullable: true })
   image?: string;
 
-  @Property()
-  createdAt: Date = new Date();
-
-  @Property({ onUpdate: () => new Date() })
-  updatedAt: Date = new Date();
+  @Index()
+  @Property({ nullable: true })
+  deletedAt?: Date;
 }

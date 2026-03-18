@@ -1,10 +1,9 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, Property } from '@mikro-orm/core';
+
+import { CustomBaseEntity } from '../../../common/entities/CustomBaseEntity';
 
 @Entity({ tableName: 'verifications' })
-export class Verification {
-  @PrimaryKey()
-  id: string;
-
+export class Verification extends CustomBaseEntity {
   @Property()
   identifier: string;
 
@@ -13,10 +12,4 @@ export class Verification {
 
   @Property()
   expiresAt: Date;
-
-  @Property()
-  createdAt: Date = new Date();
-
-  @Property({ onUpdate: () => new Date() })
-  updatedAt: Date = new Date();
 }

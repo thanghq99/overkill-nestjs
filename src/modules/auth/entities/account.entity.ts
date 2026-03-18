@@ -1,19 +1,13 @@
-import {
-  Entity,
-  ManyToOne,
-  PrimaryKey,
-  Property,
-  Unique,
-} from '@mikro-orm/core';
+import { Entity, Index, ManyToOne, Property, Unique } from '@mikro-orm/core';
 
+import { CustomBaseEntity } from '../../../common/entities/CustomBaseEntity';
+import { SoftDelete } from '../../../common/entities/SoftDelete.filter';
 import { User } from '../../users/entities/user.entity';
 
 @Entity({ tableName: 'accounts' })
 @Unique({ properties: ['providerId', 'accountId'] })
-export class Account {
-  @PrimaryKey()
-  id: string;
-
+@SoftDelete()
+export class Account extends CustomBaseEntity {
   @ManyToOne(() => User, { deleteRule: 'cascade' })
   userId: string;
 
@@ -44,9 +38,7 @@ export class Account {
   @Property({ nullable: true, type: 'text' })
   password?: string;
 
-  @Property()
-  createdAt: Date = new Date();
-
-  @Property({ onUpdate: () => new Date() })
-  updatedAt: Date = new Date();
+  @Index()
+  @Property({ nullable: true })
+  deletedAt?: Date;
 }

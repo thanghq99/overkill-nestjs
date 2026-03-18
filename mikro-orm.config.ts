@@ -10,8 +10,14 @@ const validatedEnv = envSchema.parse(process.env);
 const ormConfig = defineConfig({
   driver: PostgreSqlDriver,
   clientUrl: validatedEnv.DATABASE_URL,
-  entities: ['./dist/**/entities/*.entity.js'],
-  entitiesTs: ['./src/**/entities/*.entity.ts'],
+  entities: [
+    './dist/src/common/entities/CustomBaseEntity.js',
+    './dist/**/entities/*.entity.js',
+  ],
+  entitiesTs: [
+    './src/common/entities/CustomBaseEntity.ts',
+    './src/**/entities/*.entity.ts',
+  ],
   migrations: {
     path: './dist/migrations',
     pathTs: './database/migrations',
