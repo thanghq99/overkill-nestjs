@@ -5,6 +5,9 @@ import { registerAs } from '@nestjs/config';
 export const appConfig = registerAs('app', () => ({
   port: Number(process.env.PORT),
   nodeEnv: process.env.NODE_ENV as Environment,
+  appUrl: process.env.APP_URL,
+  appTitle: process.env.APP_TITLE,
+  openRouterApiKey: process.env.OPENROUTER_API_KEY,
 }));
 
 export const dbConfig = registerAs('db', () => ({

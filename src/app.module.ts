@@ -6,6 +6,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AiModule } from './modules/ai/ai.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CustomConfigModule } from './modules/config/config.module';
 import { UsersModule } from './modules/users/users.module';
@@ -24,6 +25,7 @@ import { UsersModule } from './modules/users/users.module';
     }),
     UsersModule,
     AuthModule,
+    AiModule,
   ],
   controllers: [AppController],
   providers: [

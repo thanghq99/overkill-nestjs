@@ -16,6 +16,18 @@ export class AppConfigService {
     return this.config.getOrThrow<Environment>('app.nodeEnv');
   }
 
+  get appUrl(): AppConfig['appUrl'] {
+    return this.config.getOrThrow<string>('app.appUrl');
+  }
+
+  get appTitle(): AppConfig['appTitle'] {
+    return this.config.getOrThrow<string>('app.appTitle');
+  }
+
+  get openRouterApiKey(): AppConfig['openRouterApiKey'] {
+    return this.config.getOrThrow<string>('app.openRouterApiKey');
+  }
+
   get databaseUrl(): DbConfig['databaseUrl'] {
     return this.config.getOrThrow<string>('db.databaseUrl');
   }
