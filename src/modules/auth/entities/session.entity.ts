@@ -6,7 +6,7 @@ import { User } from '../../users/entities/user.entity';
 @Entity({ tableName: 'sessions' })
 export class Session extends CustomBaseEntity {
   @ManyToOne(() => User, { deleteRule: 'cascade' })
-  userId: string;
+  user: User;
 
   @Property()
   @Unique()

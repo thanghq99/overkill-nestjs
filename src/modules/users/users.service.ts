@@ -15,10 +15,8 @@ export class UsersService {
     private readonly userRepository: EntityRepository<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
+  create(createUserDto: CreateUserDto) {
     const user = this.userRepository.create(createUserDto);
-
-    await this.em.persist(user).flush();
 
     return user;
   }

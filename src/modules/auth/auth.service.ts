@@ -1,15 +1,21 @@
-import { EntityManager } from '@mikro-orm/postgresql';
+import { InjectRepository } from '@mikro-orm/nestjs';
+import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
+import { AUTH_PROVIDER } from 'src/common/constants';
 
 import { ConflictException, Injectable } from '@nestjs/common';
 
 import { UsersService } from '../users/users.service';
 import { RegisterDto } from './dto/auth.dto';
+import { Account } from './entities/account.entity';
+import { hashPassword } from './utils';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly em: EntityManager,
     private readonly usersService: UsersService,
+    @InjectRepository(Account)
+    private readonly accountRepository: EntityRepository<Account>,
   ) {}
   async register(registerDto: RegisterDto) {
     const { email } = registerDto;
@@ -20,9 +26,17 @@ export class AuthService {
       throw new ConflictException('Email already used');
     }
 
-    const newUser = await this.usersService.create(registerDto);
+    const hashedPassword = await hashPassword(registerDto.password);
+    const newUser = this.usersService.create(registerDto);
+    const newAccount = this.accountRepository.create({
+      user: newUser,
+      accountId: newUser.id,
+      providerId: AUTH_PROVIDER.Credentials,
+      password: hashedPassword,
+    });
 
-    await this.em.persist(newUser).flush();
+    this.em.persist([newUser, newAccount]);
+    await this.em.flush();
 
     return newUser;
   }

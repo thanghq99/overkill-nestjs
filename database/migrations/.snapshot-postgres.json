@@ -22,14 +22,14 @@
           "enumItems": [],
           "mappedType": "uuid"
         },
-        "user_id_id": {
-          "name": "user_id_id",
+        "user_id": {
+          "name": "user_id",
           "type": "uuid",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "unique": false,
+          "unique": true,
           "length": null,
           "precision": null,
           "scale": null,
@@ -264,15 +264,26 @@
           "keyName": "accounts_provider_id_account_id_unique",
           "unique": true,
           "primary": false
+        },
+        {
+          "columnNames": [
+            "user_id",
+            "provider_id"
+          ],
+          "composite": true,
+          "constraint": true,
+          "keyName": "accounts_user_id_provider_id_unique",
+          "unique": true,
+          "primary": false
         }
       ],
       "checks": [],
       "foreignKeys": {
-        "accounts_user_id_id_foreign": {
+        "accounts_user_id_foreign": {
           "columnNames": [
-            "user_id_id"
+            "user_id"
           ],
-          "constraintName": "accounts_user_id_id_foreign",
+          "constraintName": "accounts_user_id_foreign",
           "localTableName": "public.accounts",
           "referencedTableName": "public.users",
           "referencedColumnNames": [
@@ -303,8 +314,8 @@
           "enumItems": [],
           "mappedType": "uuid"
         },
-        "user_id_id": {
-          "name": "user_id_id",
+        "user_id": {
+          "name": "user_id",
           "type": "uuid",
           "unsigned": false,
           "autoincrement": false,
@@ -452,11 +463,11 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "sessions_user_id_id_foreign": {
+        "sessions_user_id_foreign": {
           "columnNames": [
-            "user_id_id"
+            "user_id"
           ],
-          "constraintName": "sessions_user_id_id_foreign",
+          "constraintName": "sessions_user_id_foreign",
           "localTableName": "public.sessions",
           "referencedTableName": "public.users",
           "referencedColumnNames": [

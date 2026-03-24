@@ -6,10 +6,11 @@ import { User } from '../../users/entities/user.entity';
 
 @Entity({ tableName: 'accounts' })
 @Unique({ properties: ['providerId', 'accountId'] })
+@Unique({ properties: ['user', 'providerId'] })
 @SoftDelete()
 export class Account extends CustomBaseEntity {
   @ManyToOne(() => User, { deleteRule: 'cascade' })
-  userId: string;
+  user: User;
 
   @Property()
   accountId: string;
