@@ -26,14 +26,14 @@ This document outlines the design and implementation strategy for the Authentica
 - `deletedAt`: Date (Soft Delete)
 
 ### 2. Account Entity (The Credentials/Connection)
-- `userId`: FK to `User.id`
+- `user`: ManyToOne to `User` (property name)
 - `accountId`: string (Link ID - e.g., email or OAuth provider unique ID)
 - `providerId`: string (e.g., 'credentials', 'google', 'github')
 - `password`: string (Hashed - Optional for OAuth)
 - `accessToken`/`refreshToken`: (For OAuth)
 
 ### 3. Session Entity (Active Login)
-- `userId`: FK to `User.id`
+- `user`: ManyToOne to `User` (property name)
 - `token`: Unique Session Token
 - `expiresAt`: Date
 - `ipAddress`/`userAgent`: Metadata
@@ -46,9 +46,9 @@ This document outlines the design and implementation strategy for the Authentica
 | :--- | :--- | :--- | :--- |
 | ✅ | **Prep** | **Node 24 Setup** | Ensure environment uses Node 24 stable. |
 | ✅ | **Prep** | **Base Entities** | Define User, Account, Session, and Verification entities. |
-| ⏳ | **Core** | **Security Utils** | Implement `argon2` hashing and verification in `auth/utils.ts`. |
-| ⬜ | **Core** | **Transactional SignUp** | Update `register` to create both `User` and `Account` in one `flush()`. |
-| ⬜ | **Core** | **Session & SignIn** | Implement credential verification and persistent session issuance. |
+| ✅ | **Core** | **Security Utils** | Implement `argon2` hashing and verification in `auth/utils.ts`. |
+| ✅ | **Core** | **Transactional SignUp** | Update `register` to create both `User` and `Account` in one `flush()`. |
+| ⏳ | **Core** | **Session & SignIn** | Implement credential verification and persistent session issuance. |
 | ⬜ | **Core** | **Auth Guards** | `SessionGuard` / `@UseGuards()` logic to protect private routes. |
 | ⬜ | **Extension**| **Social Login (OAuth)** | Integrate GitHub/Google OAuth providers. |
 | ⬜ | **Extension**| **Magic Link** | Implementation of passwordless email login (No-Password flow). |
