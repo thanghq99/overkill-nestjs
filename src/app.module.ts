@@ -1,4 +1,5 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
+import ormConfig from 'mikro-orm.config';
 
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
@@ -14,7 +15,7 @@ import { UsersModule } from './modules/users/users.module';
 @Module({
   imports: [
     CustomConfigModule,
-    MikroOrmModule.forRoot(),
+    MikroOrmModule.forRoot(ormConfig),
     ThrottlerModule.forRoot({
       throttlers: [
         {

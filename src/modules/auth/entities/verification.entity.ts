@@ -1,15 +1,16 @@
-import { Entity, Property } from '@mikro-orm/core';
+import { defineEntity, p } from '@mikro-orm/core';
+import baseProperties from 'src/common/entities/baseProperties';
 
-import { CustomBaseEntity } from '../../../common/entities/CustomBaseEntity';
+export const VerificationSchema = defineEntity({
+  name: 'Verification',
+  tableName: 'verifications',
+  properties: {
+    ...baseProperties,
+    identifier: p.string(),
+    value: p.string(),
+    expiresAt: p.datetime(),
+  },
+});
 
-@Entity({ tableName: 'verifications' })
-export class Verification extends CustomBaseEntity {
-  @Property()
-  identifier: string;
-
-  @Property()
-  value: string;
-
-  @Property()
-  expiresAt: Date;
-}
+export class Verification extends VerificationSchema.class {}
+VerificationSchema.setClass(Verification);

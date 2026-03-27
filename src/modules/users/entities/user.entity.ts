@@ -1,24 +1,23 @@
-import { Entity, Index, Property } from '@mikro-orm/core';
+import { defineEntity, p } from '@mikro-orm/core';
+import baseProperties from 'src/common/entities/baseProperties';
+import { softDeleteFilter } from 'src/common/entities/softDelete.filter';
+import { Account } from 'src/modules/auth/entities/account.entity';
+import { Session } from 'src/modules/auth/entities/session.entity';
 
-import { CustomBaseEntity } from '../../../common/entities/CustomBaseEntity';
-import { SoftDelete } from '../../../common/entities/SoftDelete.filter';
-
-@Entity({ tableName: 'users' })
-@SoftDelete()
-export class User extends CustomBaseEntity {
-  @Property()
-  name: string;
-
-  @Property({ unique: true })
-  email: string;
-
-  @Property({ default: false })
-  emailVerified?: boolean = false;
-
-  @Property({ nullable: true })
-  image?: string;
-
-  @Index()
-  @Property({ nullable: true })
-  deletedAt?: Date;
-}
+export const UserSchema = defineEntity({
+  name: 'User',
+  tableName: 'users',
+  properties: {
+    ...baseProperties,
+    name: p.string(),
+    email: p.string().unique('users_email_unique'),
+    emailVerified: p.boolean().default(false),
+    image: p.string().nullable(),
+    deletedAt: p.datetime().nullable().index('users_deleted_at_index'),
+    accounts: () => p.oneToMany(Account).mappedBy('user'),
+    sessions: () => p.oneToMany(Session).mappedBy('user'),
+  },
+  filters: { softDelete: softDeleteFilter() },
+});
+export class User extends UserSchema.class {}
+UserSchema.setClass(User);

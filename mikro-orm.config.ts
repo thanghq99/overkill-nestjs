@@ -1,3 +1,4 @@
+import { EntityGenerator } from '@mikro-orm/entity-generator';
 import { PostgreSqlDriver, defineConfig } from '@mikro-orm/postgresql';
 import dotenv from 'dotenv';
 
@@ -10,18 +11,13 @@ const validatedEnv = envSchema.parse(process.env);
 const ormConfig = defineConfig({
   driver: PostgreSqlDriver,
   clientUrl: validatedEnv.DATABASE_URL,
-  entities: [
-    './dist/src/common/entities/CustomBaseEntity.js',
-    './dist/**/entities/*.entity.js',
-  ],
-  entitiesTs: [
-    './src/common/entities/CustomBaseEntity.ts',
-    './src/**/entities/*.entity.ts',
-  ],
+  entities: ['./dist/**/entities/*.entity.js'],
+  entitiesTs: ['./src/**/entities/*.entity.ts'],
   migrations: {
     path: './dist/migrations',
     pathTs: './database/migrations',
   },
+  extensions: [EntityGenerator],
   debug: validatedEnv.NODE_ENV !== 'production',
   schemaGenerator: {
     ignoreSchema: [

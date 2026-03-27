@@ -1,4 +1,4 @@
-import { Filter } from '@mikro-orm/core';
+import { FilterDef } from '@mikro-orm/core';
 
 export type SoftDeleteOptions = {
   enabled?: boolean;
@@ -12,13 +12,15 @@ const defaultOptions = {
   field: 'deletedAt',
 };
 
-export const SoftDelete = (options: SoftDeleteOptions = {}): ClassDecorator => {
+export const softDeleteFilter = (
+  options: SoftDeleteOptions = {},
+): FilterDef<any> => {
   const { enabled, defaultIsDeleted, field } = {
     ...defaultOptions,
     ...options,
   };
 
-  return Filter({
+  return {
     name: 'softDelete',
     cond: ({ isDeleted = defaultIsDeleted }: { isDeleted?: boolean } = {}) =>
       isDeleted
@@ -28,5 +30,5 @@ export const SoftDelete = (options: SoftDeleteOptions = {}): ClassDecorator => {
           : {},
     args: false,
     default: enabled,
-  });
+  };
 };

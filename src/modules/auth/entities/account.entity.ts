@@ -1,45 +1,38 @@
-import { Entity, Index, ManyToOne, Property, Unique } from '@mikro-orm/core';
+import { defineEntity, p } from '@mikro-orm/core';
+import baseProperties from 'src/common/entities/baseProperties';
+import { softDeleteFilter } from 'src/common/entities/softDelete.filter';
+import { User } from 'src/modules/users/entities/user.entity';
 
-import { CustomBaseEntity } from '../../../common/entities/CustomBaseEntity';
-import { SoftDelete } from '../../../common/entities/SoftDelete.filter';
-import { User } from '../../users/entities/user.entity';
+export const AccountSchema = defineEntity({
+  name: 'Account',
+  tableName: 'accounts',
+  uniques: [
+    {
+      name: 'accounts_provider_id_account_id_unique',
+      properties: ['providerId', 'accountId'],
+    },
+    {
+      name: 'accounts_user_id_provider_id_unique',
+      properties: ['user', 'providerId'],
+    },
+  ],
+  properties: {
+    ...baseProperties,
+    user: () =>
+      p.manyToOne(User).ref().updateRule('cascade').deleteRule('cascade'),
+    accountId: p.string(),
+    providerId: p.string(),
+    accessToken: p.text().nullable(),
+    refreshToken: p.text().nullable(),
+    accessTokenExpiresAt: p.datetime().nullable(),
+    refreshTokenExpiresAt: p.datetime().nullable(),
+    scope: p.string().nullable(),
+    idToken: p.text().nullable(),
+    password: p.text().nullable(),
+    deletedAt: p.datetime().nullable().index('accounts_deleted_at_index'),
+  },
+  filters: { softDelete: softDeleteFilter() },
+});
 
-@Entity({ tableName: 'accounts' })
-@Unique({ properties: ['providerId', 'accountId'] })
-@Unique({ properties: ['user', 'providerId'] })
-@SoftDelete()
-export class Account extends CustomBaseEntity {
-  @ManyToOne(() => User, { deleteRule: 'cascade' })
-  user: User;
-
-  @Property()
-  accountId: string;
-
-  @Property()
-  providerId: string;
-
-  @Property({ nullable: true, type: 'text' })
-  accessToken?: string;
-
-  @Property({ nullable: true, type: 'text' })
-  refreshToken?: string;
-
-  @Property({ nullable: true })
-  accessTokenExpiresAt?: Date;
-
-  @Property({ nullable: true })
-  refreshTokenExpiresAt?: Date;
-
-  @Property({ nullable: true })
-  scope?: string;
-
-  @Property({ nullable: true, type: 'text' })
-  idToken?: string;
-
-  @Property({ nullable: true, type: 'text' })
-  password?: string;
-
-  @Index()
-  @Property({ nullable: true })
-  deletedAt?: Date;
-}
+export class Account extends AccountSchema.class {}
+AccountSchema.setClass(Account);
