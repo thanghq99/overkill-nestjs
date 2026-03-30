@@ -16,7 +16,10 @@ export class UsersService {
   ) {}
 
   create(createUserDto: CreateUserDto) {
-    const user = this.userRepository.create(createUserDto);
+    const user = this.userRepository.create({
+      ...createUserDto,
+      id: crypto.randomUUID(),
+    });
 
     return user;
   }

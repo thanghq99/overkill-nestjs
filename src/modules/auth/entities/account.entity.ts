@@ -22,14 +22,18 @@ export const AccountSchema = defineEntity({
       p.manyToOne(User).ref().updateRule('cascade').deleteRule('cascade'),
     accountId: p.string(),
     providerId: p.string(),
-    accessToken: p.text().nullable(),
-    refreshToken: p.text().nullable(),
-    accessTokenExpiresAt: p.datetime().nullable(),
-    refreshTokenExpiresAt: p.datetime().nullable(),
-    scope: p.string().nullable(),
-    idToken: p.text().nullable(),
-    password: p.text().nullable(),
-    deletedAt: p.datetime().nullable().index('accounts_deleted_at_index'),
+    accessToken: p.text().nullable().hidden(),
+    refreshToken: p.text().nullable().hidden(),
+    accessTokenExpiresAt: p.datetime().nullable().hidden(),
+    refreshTokenExpiresAt: p.datetime().nullable().hidden(),
+    scope: p.string().nullable().hidden(),
+    idToken: p.text().nullable().hidden(),
+    password: p.text().nullable().hidden(),
+    deletedAt: p
+      .datetime()
+      .nullable()
+      .index('accounts_deleted_at_index')
+      .hidden(),
   },
   filters: { softDelete: softDeleteFilter() },
 });
