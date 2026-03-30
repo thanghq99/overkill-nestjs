@@ -1,7 +1,10 @@
 import { p } from '@mikro-orm/core';
 
 const baseProperties = {
-  id: p.uuid().primary().defaultRaw(`gen_random_uuid()`),
+  id: p
+    .uuid()
+    .primary()
+    .onCreate(() => crypto.randomUUID()),
   createdAt: p.datetime().onCreate(() => new Date()),
   updatedAt: p
     .datetime()
