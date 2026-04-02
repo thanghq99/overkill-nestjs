@@ -1,13 +1,16 @@
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
 import { plainToInstance } from 'class-transformer';
+import { randomBytes } from 'node:crypto';
 import { AUTH_PROVIDER } from 'src/common/constants';
 
 import { ConflictException, Injectable } from '@nestjs/common';
 
+import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { AuthResponseDto, RegisterDto } from './dto/auth.dto';
 import { Account } from './entities/account.entity';
+import { Session } from './entities/session.entity';
 import { comparePassword, hashPassword } from './utils';
 
 @Injectable()
@@ -17,6 +20,8 @@ export class AuthService {
     private readonly usersService: UsersService,
     @InjectRepository(Account)
     private readonly accountRepository: EntityRepository<Account>,
+    @InjectRepository(Session)
+    private readonly sessionRepository: EntityRepository<Session>,
   ) {}
 
   async register(registerDto: RegisterDto) {
@@ -69,5 +74,36 @@ export class AuthService {
     if (!isPasswordValid) return null;
 
     return user;
+  }
+
+  async createSession(user: User, userAgent?: string, ipAddress?: string) {
+    const token = randomBytes(32).toString('hex');
+    const expiresAt = new Date();
+
+    expiresAt.setDate(expiresAt.getDate() + 30); // 30 days
+
+    const session = this.sessionRepository.create({
+      user,
+      token,
+      expiresAt,
+      userAgent,
+      ipAddress,
+    });
+
+    await this.em.persist(session).flush();
+
+    return session;
+  }
+
+  async validateSession(token: string) {
+    const session = await this.sessionRepository.findOne(
+      {
+        token,
+        expiresAt: { $gt: new Date() },
+      },
+      { populate: ['user'] },
+    );
+
+    return session?.user ? session.user.getEntity() : null;
   }
 }
